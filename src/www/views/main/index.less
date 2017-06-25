@@ -1,0 +1,75 @@
+.stage-view.main {
+  .content {
+    padding: 45px 10px 10px;
+
+    .tabs-nav {
+      position: fixed;
+      left: 3%;
+      top: @actionbar-height; // because of tabs
+      width: 94%;
+      font-size: 0.8em;
+    }
+
+    .stories {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+
+      > li {
+        padding: 12px;
+        border-bottom: 1px solid rgba(0,0,0,0.06);
+
+        >.score {
+          background: rgba(200, 200, 200, 0.2);
+          font-size: 0.8em;
+          display: inline-block;
+          margin: 0 5px 5px 0;
+          padding: 3px;
+          border-radius: 3px;
+          min-width: 50px;
+          text-align: center;
+        }
+        .title {
+          text-decoration: none;
+          color: lighten(@text-color, 6%);
+          font-weight: normal;
+        }
+
+        &.actions {
+          border-bottom: none;
+          overflow: auto;
+          span {
+            display: inline-block;
+            cursor: pointer;
+            text-decoration: none;
+            padding: 5px;
+            color: @selected-bg-color;
+            font-size: 0.9em;
+          }
+        }
+      }
+    }
+
+  }
+}
+.actionbar.main {
+  .about-icon {
+    display: inline-block;
+    border-radius: 50%;
+    padding: 5px 15px;
+    margin-top: 11px;
+    margin-right: 11px;
+    font-size: 1.5em;
+    background: @base-color;
+  }
+
+  .action {
+    .title {
+      color: lighten(@selected-bg-color, 5%);
+    }
+  }
+
+  .spin {
+    color: @selected-bg-color;
+  }
+}

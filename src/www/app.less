@@ -1,0 +1,100 @@
+@import "less/color-theme.less";
+@import "less/common.less";
+@import "less/form.less";
+@import "less/tabs.less";
+@import "less/loading.less";
+@import "less/animations.less";
+@import "less/layout.less";
+@import "components/actionbar.less";
+
+
+.button, button, input[type=button] {
+  text-transform: uppercase;
+}
+
+.alt-bg {
+  background-color: @alt-bg-color;
+  // background-color: @toolbar-bg-color;
+  color: @alt-text-color;
+}
+
+.stage-view {
+  background-color: @bg-color;
+  color: @text-color;
+
+  &.alt-bg {
+    .alt-bg;
+  }
+}
+
+
+.control-panel {
+  margin: 0 0 15px;
+  // padding: 5px;
+  // width: 50%;
+  // float: left;
+  // border: 1px solid rgba(0,0,0,0.05);
+
+  > .header {
+    text-transform: uppercase;
+    padding: 15px 10px 10px;
+    background: rgba(0,0,0,0.04);
+  }
+
+  > .content {
+    padding: 10px;
+    background: rgba(0,0,0,0.04);
+
+    .icon, .output {
+      display: block;
+      float: left;
+    }
+
+    .icon {
+      width: 100px;
+      // height: 100px;
+      background: rgba(0,0,0,0.1);
+      margin-right: 10px;
+      border-radius: 50%;
+      padding: 15px;
+    }
+
+    .output {
+      font-size: 4em;
+    }
+
+    .controls {
+      clear: both;
+      padding: 20px 10px 5px;
+      overflow: auto;
+      // background: rgba(0,0,0,0.1);
+      // border: 5px solid rgba(0,0,0,0.04);
+    }
+
+  }
+}
+
+.message {
+  padding: 10px;
+  color: #fff;
+
+  width: 94%;
+  margin: 3% 10px;
+
+  position: fixed;
+  bottom: 0;
+  left: 0;
+
+  z-index: 100;
+
+  background-color: rgba(0,0,0,0.05);
+  &.error {
+    background-color: @error-color;
+  }
+  &.success {
+    background-color: @success-color;
+  }
+}
+
+/* --------------------------------------- Additional Views ------------------------------------- */
+@import "views/index.less";

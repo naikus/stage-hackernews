@@ -1,0 +1,210 @@
+// form controls
+@pad-default: 12px;
+
+input,
+      button,
+      select,
+      textarea,
+      .button {
+   padding: @pad-default;
+   font-size: 1em;
+   border: 1px solid rgba(0,0,0,0.07);
+   border-radius: 2px;
+   display: block;
+   position: relative;
+   width: 100%;
+   margin: 0;
+   margin-bottom: 12px;
+   background-color: lighten(@bg-color, 5%);
+   color: @text-color;
+
+   -webkit-appearance: caret;
+   .border-box;
+
+   &::-moz-focus-inner {
+      outline: 0;
+      border: 0;
+   }
+
+   &:focus {
+      border-bottom-color: lighten(@selected-bg-color-alt, 20%);
+      // box-shadow: 0 0 2px lighten(@active-bg-color, 10%);
+      outline: 0;
+   }
+
+   &[disabled], &.disabled {
+      background-color: darken(@bg-color, 10%) !important;
+   }
+
+   &.inline {
+      display: inline-block;
+      width: auto;
+   }
+}
+a.button {
+   text-decoration: none;
+}
+textarea {
+   min-height: 100px;
+}
+.button, input[type=button], button, input[type=reset], input[type=submit] {
+   // background-color: darken(@bg-color, 20%);
+   border: 1px solid rgba(0,0,0,0.1);
+   border-radius: 2px;
+   // border-bottom-width: 3px;
+   cursor: pointer;
+   text-align: center;
+
+   .no-select;
+
+   /*
+   > .fa {
+      font-size: 1.1em;
+      margin-right: 5px;
+   }
+   */
+
+   &:hover {
+      background-color: darken(@bg-color, 10%);
+      color: @alt-text-color;
+   }
+   &:focus {
+      box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(0, 0, 0, 0.3);
+      outline: 0;
+   }
+   &:active, &.active {
+     border-color: rgba(0, 0, 0, 0.2);
+     // box-shadow: 0 0 3px rgba(0, 0, 0, 0.3) inset;
+     color: @active-text-color;
+     // background-color: darken(@alt-bg-color, 5%);
+   }
+
+   &.primary {
+     background-color: @primary-action-bg-color;
+     color: @primary-action-text-color;
+   }
+   &.primary:hover {
+     background-color: darken(@primary-action-bg-color, 5%);
+   }
+   &.primary:focus {
+     box-shadow: 0 0 2px lighten(@primary-action-bg-color, 10%);
+     outline: none;
+   }
+   &.primary:active, &.primary.active {
+     border-color: darken(@primary-action-bg-color, 5%);
+     box-shadow: 0 0 5px rgba(0,0,0,0.08) inset;
+     background-color: darken(@primary-action-bg-color, 8%);
+     color: @primary-action-text-color;
+   }
+
+   &[disabled], &[disabled]:hover, &[disabled]:active, &[diabled].active {
+     box-shadow: none !important;
+     border-color: rgba(0,0,0,0.1) !important;
+     color: lighten(@text-color, 35%) !important;
+   }
+
+   /*
+   &.secondary {
+     background-color: @secondary-action-color;
+     color: @secondary-text-color;
+   }
+   &.secondary:hover {
+     background-color: darken(@secondary-action-color, 5%);
+   }
+   &.secondary:focus {
+     box-shadow: 0 0 2px lighten(@secondary-action-color, 10%);
+     outline: none;
+   }
+   &.secondary:active, &.secondary.active {
+     border-color: darken(@secondary-action-color, 15%);
+     box-shadow: 0 0 5px rgba(0,0,0,0.4) inset;
+     background-color: darken(@secondary-action-color, 5%);
+   }
+   */
+
+}
+label {
+  display: block;
+  padding: 3px 0;
+  font-weight: bolder;
+
+  .hint {
+    font-size: 0.85em;
+    font-weight: 100;
+  }
+}
+
+
+input[type=range] {
+  padding: 0;
+  -webkit-appearance: none;
+  // margin: 0;
+  background-color: transparent;
+  border: none;
+
+  &:focus {
+    outline: none;
+    border-bottom-color: rgba(0,0,0,0.07);
+  }
+  &:-moz-focusring {
+    outline: 0;
+  }
+}
+
+.track-style {
+  -webkit-appearance: none;
+  background: rgba(0,0,0,0.2);
+  padding: 0;
+  height: 5px;
+  outline: none;
+}
+.thumb-style {
+  -webkit-appearance: none;
+  width: 1.5em;
+  height: 1.5em;
+  border-radius: 50%;
+  background-color: @selected-bg-color;
+  margin-top: -0.6em;
+  border: none;
+}
+
+/* Three different definitions are required for each browser */
+input[type=range] {
+  &::-moz-range-track {
+    .track-style;
+  }
+
+  &::-moz-range-thumb {
+    .thumb-style;
+  }
+
+  &:focus::-moz-range-track {
+    outline: none;
+  }
+  &:focus::-moz-range-thumb {
+    border: 5px solid rgba(255,255,255,0.2);
+  }
+}
+
+input[type=range] {
+  &::-webkit-slider-runnable-track {
+    .track-style;
+  }
+
+  &:focus::-webkit-slider-thumb {
+    border: 5px solid rgba(255,255,255,0.2);
+  }
+  &::-webkit-slider-thumb {
+    .thumb-style;
+  }
+}
+
+input[type=range] {
+  &::-ms-track {
+    .track-style;
+  }
+  &::-ms-thumb {
+    .thumb-style;
+  }
+}

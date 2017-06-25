@@ -1,0 +1,36 @@
+<div class="stage-view main" data-view="main">
+  <script id="homeActions" type="text/x-template">
+    <div class="actionbar main">
+      <div class="action first">
+        <span class="text title">Hacker News</span>
+        <!-- img class="img" src="images/logo-actionbar.png" alt="Logo" / -->
+      </div>
+      <div class="action right activable" v-on:click.stop="about">
+        <i class="icon icon-star"></i>
+      </div>
+      <!-- div class="action right activable anim" v-on:click.stop="toggle">
+        <i class="icon icon-circle-plus" v-bind:class="{spin: busy}"></i>
+      </div -->
+    </div>
+  </script>
+  <div class="content">
+    <ul class="tabs-nav">
+      <li :class="{'tab-item': true, activable: true, selected: type.id === storyType}"
+          v-on:click.stop="showStories(type.id, $event)"
+          v-for="type in storyTypes">
+        <a>{{type.label}}</a>
+      </li>
+    </ul>
+    <ul class="stories">
+      <li class="activable" v-for="(story, i) in stories">
+        <span class="score">{{story.score}}</span>
+        <a class="title" target="_blank" :href="story.url">{{story.title}}</a>
+      </li>
+      <li class="actions">
+        <span class="activable _pull-left" v-on:click.stop="previousStories">Previous</span>
+        <span class="activable _pull-right" v-on:click.stop="nextStories">Next</span>
+      </li>
+    </ul>
+  </div>
+  <script src="views/main/index.js"></script>
+</div>
