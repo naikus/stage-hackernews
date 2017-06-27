@@ -1,13 +1,18 @@
 .stage-view.main {
+  &.in {
+    will-change: auto;
+  }
   .content {
-    padding: 45px 10px 10px;
+    padding: 45px 0 0;
 
     .tabs-nav {
       position: fixed;
-      left: 3%;
+      left: 0;
       top: @actionbar-height; // because of tabs
-      width: 94%;
+      width: 100%;
       font-size: 0.8em;
+      padding: 0 10px;
+      z-index: 1;
     }
 
     .stories {
@@ -16,28 +21,45 @@
       margin: 0;
 
       > li {
-        padding: 12px;
+        padding: 13px;
         border-bottom: 1px solid rgba(0,0,0,0.06);
+        overflow: auto;
+        position: relative;
+        padding-left: 60px;
+        line-height: 1.2em;
 
         >.score {
-          background: rgba(200, 200, 200, 0.2);
-          font-size: 0.8em;
-          display: inline-block;
-          margin: 0 5px 5px 0;
-          padding: 3px;
-          border-radius: 3px;
-          min-width: 50px;
+          position: absolute;
+          font-size: 1.1em;
+          top: 50%;
+          left: 0;
           text-align: center;
+          margin-top: -10px;
+          width: 55px;
+          font-weight: 500;
+          color: @selected-bg-color;
         }
         .title {
-          text-decoration: none;
           color: lighten(@text-color, 6%);
-          font-weight: normal;
+          font-weight: 400;
+          text-decoration: none;
+        }
+        .detail {
+          color: darken(@text-color, 6%);
+          font-weight: 300;
+          font-size: 0.8em;
+
+          .user, .time {
+            color: darken(@text-color, 6%);
+            margin: 0 2px;
+          }
         }
 
         &.actions {
           border-bottom: none;
           overflow: auto;
+          padding: 13px 0;
+          text-align: center;
           span {
             display: inline-block;
             cursor: pointer;
@@ -45,6 +67,7 @@
             padding: 5px;
             color: @selected-bg-color;
             font-size: 0.9em;
+            font-weight: normal;
           }
         }
       }

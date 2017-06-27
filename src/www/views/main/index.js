@@ -2,22 +2,18 @@
   const Stage = require("stage"),
       Vue = require("vue"),
       firebase = require("firebase-service"),
+      timeago = require("timeago.js")(),
       busyIndicator = require("app").BusyIndicator;
 
   Stage.defineView("main", function(stageContext, viewUi) {
-    let viewData, viewContent, actions, paginations = {
+    let viewData, viewContent, actions;
+    const paginations = {
       "top": firebase.topStories(30),
       "new": firebase.newStories(30),
       "show": firebase.showStories(30),
       "ask": firebase.askStories(30),
       "job": firebase.jobStories(30)
     };
-
-    function about() {
-      stageContext.pushView("about", {
-        transition: "slide-up"
-      });
-    }
 
     function showStories(type) {
       viewData.storyType = type;
@@ -34,6 +30,7 @@
       if(pagination.hasNext()) {
         busyIndicator.setBusy(true);
         pagination.next().then(stories => {
+          console.log(stories[0].text);
           busyIndicator.setBusy(false);
           viewData.stories = stories;
         });
@@ -71,10 +68,12 @@
             console.log("Mounted home view");
           },
           methods: {
-            about,
             showStories,
             nextStories,
             previousStories
+          },
+          filters: {
+            timeago: time => timeago.format(new Date(time * 1000))
           }
         });
 
@@ -85,7 +84,10 @@
           },
           computed: {},
           methods: {
-            about
+            about: () => stageContext.pushView("about", {
+              transition: "slide-up"
+            }),
+            settings: () => stageContext.pushView("settings")
           }
         };
 

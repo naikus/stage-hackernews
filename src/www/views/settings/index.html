@@ -1,0 +1,21 @@
+<div class="stage-view settings" data-view="settings">
+  <style scoped>
+    .content {
+      padding: 20px;
+    }
+  </style>
+  <script id="settingsActions" type="text/x-template">
+    <div class="actionbar settings">
+      <div class="action activable">
+        <i class="icon icon-arrow-left" v-on:click.stop="back"></i>
+      </div>
+      <div class="action">
+        <span class="text title">Settings</span>
+      </div>
+    </div>
+  </script>
+  <div class="content">
+    Settings View
+  </div>
+  <script src="views/settings/index.js"></script>
+</div>

@@ -5,6 +5,9 @@
         <span class="text title">Hacker News</span>
         <!-- img class="img" src="images/logo-actionbar.png" alt="Logo" / -->
       </div>
+      <div class="action right activable" v-on:click.stop="settings">
+        <i class="icon icon-cog"></i>
+      </div>
       <div class="action right activable" v-on:click.stop="about">
         <i class="icon icon-star"></i>
       </div>
@@ -25,10 +28,15 @@
       <li class="activable" v-for="(story, i) in stories">
         <span class="score">{{story.score}}</span>
         <a class="title" target="_blank" :href="story.url">{{story.title}}</a>
+        <div class="detail">
+          By <a href="#">{{story.by}}</a> 
+          <span>{{story.time | timeago}}</span>
+          <span> | {{story.descendants}} comments</span>
+        </div>
       </li>
       <li class="actions">
-        <span class="activable _pull-left" v-on:click.stop="previousStories">Previous</span>
-        <span class="activable _pull-right" v-on:click.stop="nextStories">Next</span>
+        <span class="activable" v-on:click.stop="previousStories">Previous</span> | 
+        <span class="activable" v-on:click.stop="nextStories">Next</span>
       </li>
     </ul>
   </div>
