@@ -1,7 +1,4 @@
 .stage-view.main {
-  &.in {
-    will-change: auto;
-  }
   .content {
     padding: 45px 0 0;
 
@@ -13,6 +10,10 @@
       font-size: 0.8em;
       padding: 0 10px;
       z-index: 1;
+
+      > .tab-item {
+        width: 70px;
+      }
     }
 
     .stories {

@@ -11,9 +11,9 @@
 // Background color for overlays, inlays etc.
 @alt-bg-color: lighten(@bg-color, 5%);
 // Text color to complement the background color
-@text-color: #c0d2e2;// #4a4358;
+@text-color: #acb7c3;
 // Text color to complement alternate background color
-@alt-text-color: #c0d2ec;
+@alt-text-color: darken(@text-color, 5%);
 // Default selected background color
 @selected-bg-color: #ff6600;
 @selected-bg-color-alt: darken(#ff6600, 5%);
@@ -34,4 +34,4 @@
 @toolbar-bg-color: darken(@base-color, 2%);
 @toolbar-text-color: @text-color;
 
-@link-color: lighten(@active-bg-color, 30%);
+@link-color: @text-color;

@@ -79,13 +79,15 @@ Pagination.prototype = {
     if(this.end) {
       return Promise.resolve();
     }
+    console.log("next", this.offset);
     return this.fetch(this.offset, this.limit).then(data => {
-      const {length} = data;
-      if(length < this.limit) {
+      // const {length} = data;
+      this.offset += this.limit;
+      if(data.length < this.limit) {
         this.end = true;
       }
-      this.offset += length;
       this.data = data;
+      console.log("next after fetch", this.offset);
       return data; 
     });
   },
@@ -100,16 +102,19 @@ Pagination.prototype = {
       this.offset = 0;
       return Promise.resolve();
     }
+    console.log("previous", this.offset);
     
     return this.fetch(this.offset, this.limit).then(data => {
-      this.offset -= this.limit;
+      this.offset += this.limit;
       this.end = false;
       this.data = data;
+      console.log("previous after fetch", this.offset);
       return data;
     });
   },
 
   hasPrevious() {
+    console.log("hasPrevious", this.offset);
     return this.offset - this.limit > 0;
   }
 };
