@@ -25,13 +25,14 @@
       </li>
     </ul>
     <ul class="stories">
-      <li class="activable" v-for="(story, i) in stories.items">
+      <li class="activable" v-for="(story, i) in stories.items"
+          v-on:click.stop="showComments(story, $event)">
         <span class="score">{{story.score}}</span>
         <a class="title" target="_blank" :href="story.url">{{story.title}}</a>
         <div class="detail">
-          By <a href="#">{{story.by}}</a> 
+          <a href="#">{{story.by}}</a> 
           <span>{{story.time | timeago}}</span>
-          <span> | {{story.descendants}} comments</span>
+          <span v-if="story.descendants"> | {{story.descendants}} comments</span>
         </div>
       </li>
     </ul>

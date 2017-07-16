@@ -1,0 +1,20 @@
+<div class="stage-view comments" data-view="comments">
+  <script id="commentsActions" type="text/x-template">
+    <div class="actionbar comments">
+      <div class="action activable">
+        <i class="icon icon-arrow-left" v-on:click.stop="back"></i>
+      </div>
+      <div class="action">
+        <span class="text title">Comments</span>
+      </div>
+    </div>
+  </script>
+  <div class="content">
+    <div class="story">
+      <div class="title">{{story.title}}</div>
+      <div class="text">{{story.text}}</div>
+    </div>
+    <div class="comments"></div>
+  </div>
+  <script src="views/comments/index.js"></script>
+</div>

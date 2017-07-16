@@ -10,7 +10,7 @@
     let viewData, viewContent, actions;
 
     return {
-      initialize: function(opts) {
+      initialize(opts) {
         viewData = {
           storyTypes: [
             {id: "top", label: "Top"},
@@ -39,6 +39,12 @@
             previousStories() {
               busyIndicator.setBusy(true);
               this.$store.dispatch("PREVIOUS_STORIES").then(() => busyIndicator.setBusy(false));
+            },
+            showComments(story, e) {
+              if(e.target.nodeName === "A" || this.stories.type === "job") {
+                return;
+              }
+              stageContext.pushView("comments", {story: story});
             }
           },
           computed: {

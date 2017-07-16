@@ -1,25 +1,29 @@
 (function() {
   const Stage = require("stage"),
-      Vue = require("vue");
+      Vue = require("vue"),
+      store = require("app").Store;
 
-  Stage.defineView("settings", function(stageContext, viewUi) {
+
+  Stage.defineView("comments", function(stageContext, viewUi) {
     let viewData, viewContent, actions;
 
     return {
       initialize(opts) {
         viewData = {
+          story: opts.story
         };
 
         viewContent = new Vue({
           data: viewData,
+          store,
           mounted: function() {
-            console.log("Mounted settings view");
+            console.log("Mounted comments view");
           },
           methods: {}
         });
 
         actions = {
-          template: "#settingsActions",
+          template: "#commentsActions",
           data: function() {
             return {}
           },
@@ -35,6 +39,11 @@
 
       getActionBar() {
         return actions;
+      },
+
+      activate(opts) {
+        console.log(opts);
+        viewData.story = opts.story;
       }
     };
   });
