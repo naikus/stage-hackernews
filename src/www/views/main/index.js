@@ -3,50 +3,11 @@
       Vue = require("vue"),
       firebase = require("firebase-service"),
       timeago = require("timeago.js")(),
-      busyIndicator = require("app").BusyIndicator;
+      busyIndicator = require("app").BusyIndicator,
+      store = require("app").Store;
 
   Stage.defineView("main", function(stageContext, viewUi) {
     let viewData, viewContent, actions;
-    const paginations = {
-      "top": firebase.topStories(30),
-      "new": firebase.newStories(30),
-      "show": firebase.showStories(30),
-      "ask": firebase.askStories(30),
-      "job": firebase.jobStories(30)
-    };
-
-    function showStories(type) {
-      viewData.storyType = type;
-      const pagination = paginations[type];
-      if(pagination.data) {
-        viewData.stories = pagination.data;
-      }else {
-        nextStories();
-      }
-    }
-
-    function nextStories() {
-      const pagination = paginations[viewData.storyType];
-      if(pagination.hasNext()) {
-        busyIndicator.setBusy(true);
-        pagination.next().then(stories => {
-          console.log(stories[0].text);
-          busyIndicator.setBusy(false);
-          viewData.stories = stories;
-        });
-      }
-    }
-
-    function previousStories() {
-      const pagination = paginations[viewData.storyType];
-      if(pagination.hasPrevious()) {
-        busyIndicator.setBusy(true);
-        pagination.previous().then(stories => {
-          busyIndicator.setBusy(false);
-          viewData.stories = stories;
-        });
-      }
-    }
 
     return {
       initialize: function(opts) {
@@ -57,20 +18,33 @@
             {id: "show", label: "Show"},
             {id: "ask", label: "Ask"},
             {id: "job", label: "Jobs"}
-          ],
-          storyType: "top",
-          stories: []
+          ]
         };
 
         viewContent = new Vue({
           data: viewData,
-          mounted: function() {
+          store,
+          mounted() {
             console.log("Mounted home view");
           },
           methods: {
-            showStories,
-            nextStories,
-            previousStories
+            showStories(type) {
+              busyIndicator.setBusy(true);
+              this.$store.dispatch("SET_STORY_TYPE", type).then(() => busyIndicator.setBusy(false));
+            },
+            nextStories() {
+              busyIndicator.setBusy(true);
+              this.$store.dispatch("NEXT_STORIES").then(() => busyIndicator.setBusy(false));
+            },
+            previousStories() {
+              busyIndicator.setBusy(true);
+              this.$store.dispatch("PREVIOUS_STORIES").then(() => busyIndicator.setBusy(false));
+            }
+          },
+          computed: {
+            stories() { 
+              return this.$store.state.stories;
+            }
           },
           filters: {
             timeago: time => timeago.format(new Date(time * 1000))
@@ -79,7 +53,7 @@
 
         actions = {
           template: "#homeActions",
-          data: function() {
+          data() {
             return {}
           },
           computed: {},
@@ -95,13 +69,14 @@
         viewContent.$mount(el);
 
         viewUi.addEventListener("transitionin", e => {
-          if(!viewData.stories.length) {
-            showStories(viewData.storyType);
+          const {items, type} = viewContent.stories;
+          if(!items.length) {
+            viewContent.showStories(type);
           }
         }, false);
       },
 
-      getActionBar: function() {
+      getActionBar() {
         return actions;
       }
     };

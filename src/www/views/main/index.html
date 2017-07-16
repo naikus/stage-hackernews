@@ -18,14 +18,14 @@
   </script>
   <div class="content">
     <ul class="tabs-nav">
-      <li :class="{'tab-item': true, activable: true, selected: type.id === storyType}"
+      <li :class="{'tab-item': true, activable: true, selected: type.id === stories.type}"
           v-on:click.stop="showStories(type.id, $event)"
           v-for="type in storyTypes">
         <a>{{type.label}}</a>
       </li>
     </ul>
     <ul class="stories">
-      <li class="activable" v-for="(story, i) in stories">
+      <li class="activable" v-for="(story, i) in stories.items">
         <span class="score">{{story.score}}</span>
         <a class="title" target="_blank" :href="story.url">{{story.title}}</a>
         <div class="detail">
@@ -34,11 +34,18 @@
           <span> | {{story.descendants}} comments</span>
         </div>
       </li>
-      <li class="actions">
-        <span class="activable" v-on:click.stop="previousStories">Previous</span> | 
-        <span class="activable" v-on:click.stop="nextStories">Next</span>
-      </li>
     </ul>
+    <div class="actions">
+      <span :class="{activable: true, disabled: stories.firstPage}"
+          v-on:click.stop="previousStories">
+        Previous
+      </span> 
+      | 
+      <span :class="{activable: true, disabled: stories.lastPage}"
+          v-on:click.stop="nextStories">
+        Next
+      </span>
+    </div>
   </div>
   <script src="views/main/index.js"></script>
 </div>

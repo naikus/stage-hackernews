@@ -29,7 +29,8 @@ var config = {
     libs: [
       // add libraries here that you want to 'require'
       {name: "activables", path: "lib"},
-      {name: "vue", path: "lib"},
+      {name: "vue", path: "lib", file: "vue-debug"},
+      {name: "vuex", path: "lib", file: "vuex@2.3.0"},
       {name: "firebase-service", path: "services"}
     ]
   },
@@ -99,7 +100,7 @@ gulp.task("build-libs", function() {
 
   // Expose additional libs in the js and lib directories
   config.src.libs.forEach(function(lib) {
-    b.require("./" + lib.name, {
+    b.require("./" + (lib.file || lib.name), {
       basedir: config.src.dir + lib.path,
       expose: lib.name
     });

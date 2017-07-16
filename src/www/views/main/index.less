@@ -1,6 +1,6 @@
 .stage-view.main {
   .content {
-    padding: 45px 0 0;
+    padding: 45px 0 45px;
 
     .tabs-nav {
       position: fixed;
@@ -55,21 +55,30 @@
             margin: 0 2px;
           }
         }
+      }
+    }
 
-        &.actions {
-          border-bottom: none;
-          overflow: auto;
-          padding: 13px 0;
-          text-align: center;
-          span {
-            display: inline-block;
-            cursor: pointer;
-            text-decoration: none;
-            padding: 5px;
-            color: @selected-bg-color;
-            font-size: 0.9em;
-            font-weight: normal;
-          }
+    .actions {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      background-color: @toolbar-bg-color;
+      z-index: 1;
+
+      padding: 5px 0;
+      text-align: center;
+      span {
+        display: inline-block;
+        cursor: pointer;
+        text-decoration: none;
+        padding: 5px;
+        color: @selected-bg-color;
+        font-size: 0.9em;
+        font-weight: normal;
+
+        &.disabled {
+          color: darken(@text-color, 20%);
         }
       }
     }

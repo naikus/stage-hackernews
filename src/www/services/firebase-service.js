@@ -1,13 +1,11 @@
-const firebase = require("firebase"),
+const Firebase = require("firebase"),
     config = {
       databaseURL: 'https://hacker-news.firebaseio.com'
     },
     versionPath = "/v0";
     
-
-firebase.initializeApp(config);
-
-const db = firebase.database(),
+Firebase.initializeApp(config);
+const db = Firebase.database(),
     api = db.ref(versionPath),
     cache = {};
 
@@ -19,6 +17,23 @@ function itemRef(id) {
 function storyRef(story) {
   return api.child(`/${story}stories`);
 }
+
+/*
+const fetchStoryIdsRest = story => {
+  const query = asQueryParameters({
+    limitToFirst: STORY_LIMIT,
+    print: "pretty"
+  });
+  return FirebaseApi.get(`/${story}stories.json?${query}`)
+      .then(response => {
+        return response.json();
+      }).then(storyIds => {
+        cache[story] = {
+          ids: storyIds
+        }
+      });
+};
+*/
 
 function fetchStoryIds(story) {
   return new Promise((res, rej)=> {
@@ -53,7 +68,7 @@ function storyData(story, start, limit) {
   });
 }
 
-function stories(type = "top", start = 0, count = 50) {
+function stories(type = "top", start = 0, count = 30) {
   const storyIds = cache[type];
   // console.log("cached " + type, storyIds);
   if(!storyIds) {
@@ -79,7 +94,7 @@ Pagination.prototype = {
     if(this.end) {
       return Promise.resolve();
     }
-    console.log("next", this.offset);
+    // console.log("next", this.offset);
     return this.fetch(this.offset, this.limit).then(data => {
       // const {length} = data;
       this.offset += this.limit;
@@ -87,7 +102,7 @@ Pagination.prototype = {
         this.end = true;
       }
       this.data = data;
-      console.log("next after fetch", this.offset);
+      // console.log("next after fetch", this.offset);
       return data; 
     });
   },
@@ -102,19 +117,19 @@ Pagination.prototype = {
       this.offset = 0;
       return Promise.resolve();
     }
-    console.log("previous", this.offset);
+    // console.log("previous", this.offset);
     
     return this.fetch(this.offset, this.limit).then(data => {
       this.offset += this.limit;
       this.end = false;
       this.data = data;
-      console.log("previous after fetch", this.offset);
+      // console.log("previous after fetch", this.offset);
       return data;
     });
   },
 
   hasPrevious() {
-    console.log("hasPrevious", this.offset);
+    // console.log("hasPrevious", this.offset);
     return this.offset - this.limit > 0;
   }
 };

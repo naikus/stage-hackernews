@@ -1,11 +1,13 @@
-const Stage = require("stage"),
+const WhatwgFetch = require("whatwg-fetch"),
+    AppStorage = require("store2").namespace("sensorapp"),
+    Stage = require("stage"),
     Activables = require("activables"),
     Routes = require("./routes"),
     ActionBar = require("./components/actionbar"),
     BusyIndicator = require("./components/busyindicator"),
-    AppStorage = require("store2").namespace("sensorapp"),
-    WhatwgFetch = require("whatwg-fetch");
+    Store = require("./store")();
 
+console.log(Store);
 
 for(let route in Routes) {
   let viewInfo = Routes[route];
@@ -56,8 +58,10 @@ const Bootstrap = {
 };
 
 
+
 module.exports = {
   Bootstrap: Bootstrap,
-  ActionBar:  ActionBar("#actionBar", AppStage),
-  BusyIndicator: busyindicator
+  ActionBar: ActionBar("#actionBar", AppStage),
+  BusyIndicator: busyindicator,
+  Store: Store
 };
