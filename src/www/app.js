@@ -3,8 +3,9 @@ const WhatwgFetch = require("whatwg-fetch"),
     Stage = require("stage"),
     Activables = require("activables"),
     Routes = require("./routes"),
-    ActionBar = require("./components/actionbar"),
-    BusyIndicator = require("./components/busyindicator"),
+    Components = require("components"),
+    ActionBar = Components.ActionBar,
+    BusyIndicator = Components.BusyIndicator,
     Store = require("./store")();
 
 console.log(Store);

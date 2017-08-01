@@ -29,6 +29,8 @@ var config = {
     libs: [
       // add libraries here that you want to 'require'
       {name: "activables", path: "lib"},
+      // {name: "touch", path: "lib"},
+      {name: "components", path: "components", file: "index"},
       {name: "vue", path: "lib", file: "vue-debug"},
       {name: "vuex", path: "lib", file: "vuex@2.3.0"},
       {name: "firebase-service", path: "services"}

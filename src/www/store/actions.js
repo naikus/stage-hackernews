@@ -8,6 +8,23 @@ const HNFirebase = require("firebase-service"),
       "job":  HNFirebase.jobStories(PAGE_SIZE)
     };
 
+function fetchReplies(commentOrReply) {
+  return HNFirebase.replies(commentOrReply).then(replies => {
+    return Promise.all(replies.map(
+      rply => new Promise((res, rej) => {
+        if(!rply.kids) {
+          res(rply);
+        }else {
+          fetchReplies(rply).then(rplies => {
+            rply.replies = rplies;
+            res(rply);
+          })
+        }
+      })
+    ));
+  });
+}
+
 module.exports = {
   SET_STORY_TYPE(context, type) {
     const {state, dispatch, commit} = context,
@@ -60,6 +77,27 @@ module.exports = {
         })
       );
     }
-    // return Promise.resolve();
+  },
+
+  SET_STORY(context, story) {
+    context.commit("SET_STORY",story);
+  },
+
+  COMMENTS(context) {
+    const {state: {currentStory: story}, dispatch, commit} = context;
+    // dispatch("SET_STORY", story);
+    return HNFirebase.comments(story).then(comments => {
+      const currComments = comments.map(comm => {
+        comm.kids = comm.kids || [];
+        return comm;
+      });
+      // currComments[0].replies = currComments.slice(3, 5);
+      // console.log(currComments);
+      commit("SET_COMMENTS", currComments);
+    });
+  },
+
+  CLEAR_COMMENTS({commit}) {
+    commit("SET_COMMENTS", []);
   }
 }

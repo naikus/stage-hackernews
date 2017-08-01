@@ -16,5 +16,14 @@ module.exports = {
       firstPage: true,
       lastPage: true
     }
+  },
+
+  SET_STORY(state, story) {
+    state.currentStory = story;
+  },
+
+  SET_COMMENTS(state, comments) {
+    // console.log("Setting comments", comments);
+    state.currentComments = comments;
   }
 };

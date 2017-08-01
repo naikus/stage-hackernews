@@ -1,25 +1,47 @@
 (function() {
   const Stage = require("stage"),
       Vue = require("vue"),
-      store = require("app").Store;
+      firebase = require("firebase-service"),
+      busyIndicator = require("app").BusyIndicator,
+      store = require("app").Store,
+      timeago = require("timeago.js")(),
+      StoryComponent = require("components").Story,
+      CommentComponent = require("components").Comment;
 
 
   Stage.defineView("comments", function(stageContext, viewUi) {
     let viewData, viewContent, actions;
 
+    function fetchComments() {
+      busyIndicator.setBusy(true);
+      store.dispatch("COMMENTS").then(() => busyIndicator.setBusy(false));
+    }
+
+    function clearComments() {
+      store.dispatch("CLEAR_COMMENTS");
+    }
+
     return {
       initialize(opts) {
-        viewData = {
-          story: opts.story
-        };
-
+        console.log("initializing comments view");
         viewContent = new Vue({
-          data: viewData,
+          data: {},
           store,
           mounted: function() {
             console.log("Mounted comments view");
           },
-          methods: {}
+          computed: {
+            story() {
+              return this.$store.state.currentStory;
+            },
+            comments() {
+              return this.$store.state.currentComments;
+            }
+          },
+          components: {
+            "story-card": StoryComponent,
+            "hn-comment": CommentComponent
+          }
         });
 
         actions = {
@@ -35,15 +57,17 @@
 
         var el = viewUi.getElementsByClassName("content")[0];
         viewContent.$mount(el);
+        viewUi.addEventListener("transitionin", e => {
+          fetchComments();
+        }, false);
       },
 
       getActionBar() {
         return actions;
       },
 
-      activate(opts) {
-        console.log(opts);
-        viewData.story = opts.story;
+      deactivate(opts) {
+        clearComments();
       }
     };
   });

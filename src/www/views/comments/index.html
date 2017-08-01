@@ -10,11 +10,21 @@
     </div>
   </script>
   <div class="content">
-    <div class="story">
-      <div class="title">{{story.title}}</div>
-      <div class="text">{{story.text}}</div>
+    <story-card v-bind:story="story"></story-card>
+    <div class="story-text" v-html="story.text"></div>
+
+    <div class="comments">
+      <hn-comment v-for="comment in comments" v-bind:key="comment.id" v-bind:comment="comment">
+      </hn-comment>
+      <!-- div class="comment" v-for="comment in comments">
+        <div class="detail">
+          <a href="#">{{comment.by}}</a> 
+          <span>{{comment.time | timeago}}</span>
+          <span v-if="comment.kids"> | {{comment.kids.length}} replies</span>
+        </div>
+        <div class="text" v-html="comment.text"></div>
+      </div -->
     </div>
-    <div class="comments"></div>
   </div>
   <script src="views/comments/index.js"></script>
 </div>

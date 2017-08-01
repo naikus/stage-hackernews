@@ -2,12 +2,12 @@
   const Stage = require("stage"),
       Vue = require("vue"),
       firebase = require("firebase-service"),
-      timeago = require("timeago.js")(),
       busyIndicator = require("app").BusyIndicator,
-      store = require("app").Store;
+      store = require("app").Store,
+      StoryComponent = require("components").Story;
 
   Stage.defineView("main", function(stageContext, viewUi) {
-    let viewData, viewContent, actions;
+    let content, viewData, viewContent, actions;
 
     return {
       initialize(opts) {
@@ -41,10 +41,11 @@
               this.$store.dispatch("PREVIOUS_STORIES").then(() => busyIndicator.setBusy(false));
             },
             showComments(story, e) {
-              if(e.target.nodeName === "A" || this.stories.type === "job") {
+              if(e.target.nodeName === "A" && story.url || this.stories.type === "job") {
                 return;
               }
-              stageContext.pushView("comments", {story: story});
+              this.$store.dispatch("SET_STORY", story);
+              stageContext.pushView("comments");
             }
           },
           computed: {
@@ -52,8 +53,8 @@
               return this.$store.state.stories;
             }
           },
-          filters: {
-            timeago: time => timeago.format(new Date(time * 1000))
+          components: {
+            "story-card": StoryComponent
           }
         });
 
@@ -71,9 +72,7 @@
           }
         };
 
-        var el = viewUi.getElementsByClassName("content")[0];
-        viewContent.$mount(el);
-
+        viewContent.$mount(viewUi.getElementsByClassName("content")[0]);
         viewUi.addEventListener("transitionin", e => {
           const {items, type} = viewContent.stories;
           if(!items.length) {

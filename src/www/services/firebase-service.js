@@ -35,6 +35,24 @@ const fetchStoryIdsRest = story => {
 };
 */
 
+function kids(item) {
+  const kds = item.kids, len = kds.length, allKids = [];
+
+  return new Promise((resolve, reject) => {
+    kds.forEach(id => {
+      itemRef(id).once("value", comm => {
+        // console.log("child", storyItem);
+        const child = comm.val();
+        // console.log(child);
+        child.key = comm.key;
+        if(allKids.push(child) === len) {
+          resolve(allKids)
+        }
+      });
+    });
+  });
+}
+
 function fetchStoryIds(story) {
   return new Promise((res, rej)=> {
     storyRef(story).limitToFirst(300).once("value", snapshot => {
@@ -158,5 +176,11 @@ module.exports = {
   },
   jobStories(count) {
     return paginator("job", count);
+  },
+  comments(story) {
+    return kids(story);
+  },
+  replies(comment) {
+    return kids(comment);
   }
 };

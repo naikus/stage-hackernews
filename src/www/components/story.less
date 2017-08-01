@@ -1,0 +1,45 @@
+.story {
+  // background-color: @toolbar-bg-color;
+  padding: 15px;
+  padding-left: 65px;
+  position: relative;
+
+  > .score {
+    position: absolute;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: @selected-bg-color;
+    top: 50%;
+    left: 15px;
+    margin-top: -10px;
+  }
+
+  > .title {
+    color: lighten(@text-color, 6%);
+    font-weight: 300;
+    text-decoration: none;
+    padding: 5px 0;
+    font-size: 1.1em;
+  }
+
+  > .detail {
+    margin-top: 6px;
+    font-size: 0.85em;
+  }
+}
+
+.comment {
+  margin-bottom: 10px;
+  .detail {
+    background-color: rgba(0,0,0,0.2);
+    padding: 10px;
+    border-radius: 3px;
+  }
+  .text {
+    padding: 10px 0;
+  }
+  .replies {
+    border-left: 3px solid rgba(0,0,0,0.2);
+    padding: 10px;
+  }
+}

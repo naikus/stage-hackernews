@@ -12,7 +12,9 @@ const state = {
     items: [],
     firstPage: true,
     lastPage: true
-  }
+  },
+  currentStory: null,
+  currentComments: []
 };
 
 const getters = {
