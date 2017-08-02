@@ -14,7 +14,10 @@
     <div class="story-text" v-html="story.text"></div>
 
     <div class="comments">
-      <hn-comment v-for="comment in comments" v-bind:key="comment.id" v-bind:comment="comment">
+      <hn-comment v-for="comment in comments" 
+          v-bind:onaction="handleCommentAction"
+          v-bind:key="comment.id" 
+          v-bind:comment="comment">
       </hn-comment>
       <!-- div class="comment" v-for="comment in comments">
         <div class="detail">

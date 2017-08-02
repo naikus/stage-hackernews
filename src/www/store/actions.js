@@ -11,16 +11,20 @@ const HNFirebase = require("firebase-service"),
 function fetchReplies(commentOrReply) {
   return HNFirebase.replies(commentOrReply).then(replies => {
     return Promise.all(replies.map(
-      rply => new Promise((res, rej) => {
-        if(!rply.kids) {
-          res(rply);
-        }else {
-          fetchReplies(rply).then(rplies => {
-            rply.replies = rplies;
+      rply => {
+        rply.kids = rply.kids || [];
+        rply.replies = [];
+        return new Promise((res, rej) => {
+          if(!rply.kids.length) {
             res(rply);
-          })
-        }
-      })
+          }else {
+            fetchReplies(rply).then(rplies => {
+              rply.replies = rplies;
+              res(rply);
+            })
+          }
+        });
+      }
     ));
   });
 }
@@ -89,6 +93,7 @@ module.exports = {
     return HNFirebase.comments(story).then(comments => {
       const currComments = comments.map(comm => {
         comm.kids = comm.kids || [];
+        comm.replies = [];
         return comm;
       });
       // currComments[0].replies = currComments.slice(3, 5);
@@ -99,5 +104,9 @@ module.exports = {
 
   CLEAR_COMMENTS({commit}) {
     commit("SET_COMMENTS", []);
+  },
+
+  REPLIES(context, comment) {
+    return fetchReplies(comment).then(replies => comment.replies = replies);
   }
 }

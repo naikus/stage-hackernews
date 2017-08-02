@@ -36,7 +36,7 @@ const fetchStoryIdsRest = story => {
 */
 
 function kids(item) {
-  const kds = item.kids, len = kds.length, allKids = [];
+  const kds = item.kids || (item.kids = []), len = kds.length, allKids = [];
 
   return new Promise((resolve, reject) => {
     kds.forEach(id => {
@@ -77,6 +77,7 @@ function storyData(story, start, limit) {
         // console.log("child", storyItem);
         const story = storyItem.val();
         story.key = storyItem.key;
+        story.kids = story.kids || [];
         stories.push(story);
         if(stories.length >= storyIds.length) {
           res(stories);

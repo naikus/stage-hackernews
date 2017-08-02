@@ -13,12 +13,22 @@
     let viewData, viewContent, actions;
 
     function fetchComments() {
-      busyIndicator.setBusy(true);
-      store.dispatch("COMMENTS").then(() => busyIndicator.setBusy(false));
+      const story = store.state.currentStory;
+      if(story.kids.length) {
+        busyIndicator.setBusy(true);
+        store.dispatch("COMMENTS").then(() => busyIndicator.setBusy(false));
+      }
     }
 
     function clearComments() {
       store.dispatch("CLEAR_COMMENTS");
+    }
+
+    function fetchReplies(comment) {
+      if(comment.kids.length && !comment.replies.length) {
+        busyIndicator.setBusy(true);
+        store.dispatch("REPLIES", comment).then(() => busyIndicator.setBusy(false));
+      }
     }
 
     return {
@@ -36,6 +46,11 @@
             },
             comments() {
               return this.$store.state.currentComments;
+            }
+          },
+          methods: {
+            handleCommentAction(type, data) {
+              if(type === "comment") fetchReplies(data);
             }
           },
           components: {
@@ -60,6 +75,9 @@
         viewUi.addEventListener("transitionin", e => {
           fetchComments();
         }, false);
+        viewUi.addEventListener("transitionout", e => {
+          clearComments();
+        }, false);
       },
 
       getActionBar() {
@@ -67,7 +85,7 @@
       },
 
       deactivate(opts) {
-        clearComments();
+        
       }
     };
   });
