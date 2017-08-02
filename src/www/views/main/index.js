@@ -46,6 +46,9 @@
               }
               this.$store.dispatch("SET_STORY", story);
               stageContext.pushView("comments");
+            },
+            handleStoryAction(type, data) {
+              console.log(type, data);
             }
           },
           computed: {

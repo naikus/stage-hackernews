@@ -27,7 +27,7 @@
     <ul class="stories">
       <li class="activable" v-for="(story, i) in stories.items" 
           v-on:click.stop="showComments(story, $event)">
-        <story-card :story="story"></story-card>
+        <story-card :story="story" v-on:action="handleStoryAction"></story-card>
       </li>
     </ul>
     <div class="actions">

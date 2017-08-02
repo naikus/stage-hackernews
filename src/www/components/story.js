@@ -2,19 +2,20 @@ const timeago = require("timeago.js")();
 
 module.exports = {
   story: {
+    name: "story-card",
     props: ["story", "onAction"],
     template: `
     <div class="story">
       <span class="score">{{story.score}}</span>
       <a class="title" target="_blank" :href="story.url">{{story.title}}</a>
       <div class="detail">
-        <a v-on:click.stop="this.onUser">{{story.by}}</a> 
+        <a v-on:click.stop="handleUserClick">{{story.by}}</a> 
         <span>{{story.time | timeago}}</span>
-        <span v-if="story.descendants"> | {{story.descendants | comments}}</span>
+        <span class="story-comments" v-if="story.descendants"> | {{story.descendants | comments}}</span>
       </div>
     </div>`,
     methods: {
-      onUser() {
+      handleUserClick() {
         this.$emit("action", "user", this.story.by);
       }
     },
