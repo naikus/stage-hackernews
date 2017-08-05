@@ -51,6 +51,11 @@
           methods: {
             handleCommentAction(type, data) {
               if(type === "comment") fetchReplies(data);
+            },
+            handleStoryAction(type, data) {
+              if(type === "user") stageContext.pushView("user", {
+                user: data
+              });
             }
           },
           components: {

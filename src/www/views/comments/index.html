@@ -10,7 +10,7 @@
     </div>
   </script>
   <div class="content">
-    <story-card v-bind:story="story"></story-card>
+    <story-card v-bind:story="story" v-on:action="handleStoryAction"></story-card>
     <div class="story-text" v-html="story.text"></div>
 
     <div class="comments">

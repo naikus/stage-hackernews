@@ -48,7 +48,9 @@
               stageContext.pushView("comments");
             },
             handleStoryAction(type, data) {
-              console.log(type, data);
+              if(type === "user") stageContext.pushView("user", {
+                user: data
+              });
             }
           },
           computed: {
