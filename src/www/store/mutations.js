@@ -25,5 +25,9 @@ module.exports = {
   SET_COMMENTS(state, comments) {
     // console.log("Setting comments", comments);
     state.currentComments = comments;
+  },
+
+  SET_USER(state, user) {
+    state.user = user;
   }
 };

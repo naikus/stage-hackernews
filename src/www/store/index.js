@@ -14,7 +14,8 @@ const state = {
     lastPage: true
   },
   currentStory: null,
-  currentComments: []
+  currentComments: [],
+  user: null
 };
 
 const getters = {

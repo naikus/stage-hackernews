@@ -1,0 +1,35 @@
+.user-card {
+  padding: 15px;
+
+  > .title {
+    font-size: 1.3em;
+    font-weight: 300;
+    color: @selected-bg-color;
+    padding: 0 0 15px;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+  }
+
+  > .detail {
+    overflow: auto;
+    > .created, > .karma {
+      width: 50%;
+      float: left;
+      padding: 20px 15px 20px 0;
+
+      > .label, > .value {
+        display: block;
+      }
+      > .label {
+        text-transform: uppercase;
+      }
+      > .value {
+        font-size: 2em;
+        color: @selected-bg-color;
+      }
+    }
+  }
+
+  > .about {
+
+  }
+}

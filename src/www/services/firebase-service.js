@@ -67,9 +67,9 @@ function fetchStoryIds(story) {
   });
 }
 
-function storyData(story, start, limit) {
-  const storyIds = cache[story].ids.slice(start, start + limit), 
-      ref = storyRef(story), 
+function storyData(arrIds, start, limit) {
+  const storyIds = arrIds.slice(start, start + limit), 
+      // ref = storyRef(story), 
       stories = [];
   return new Promise((res, rej) => {
     storyIds.forEach(id => {
@@ -92,16 +92,30 @@ function stories(type = "top", start = 0, count = 30) {
   // console.log("cached " + type, storyIds);
   if(!storyIds) {
     return fetchStoryIds(type).then(() => {
-      return storyData(type, start, count);
+      const arrIds = cache[type].ids;
+      return storyData(arrIds, start, count);
     });
   }else {
-    return storyData(type, start, count);
+    const arrIds = cache[type].ids;
+    return storyData(arrids, start, count);
   }
 }
 
+function userData(id) {
+  const userRef = api.child(`/user/${id}`);
+  return new Promise((res, rej) => {
+    userRef.once("value", userData => {
+      const user = userData.val()
+      user.id = id;
+      user.submitted = user.submitted || [];
+      res(user);
+    });
+  });
+}
 
-function Pagination(fetch, limit) {
-  this.fetch = fetch;
+
+function Pagination(fetchFunc, limit) {
+  this.fetch = fetchFunc;
   this.limit = limit;
   this.offset = 0;
   this.end = false;
@@ -183,5 +197,13 @@ module.exports = {
   },
   replies(comment) {
     return kids(comment);
+  },
+  user(id) {
+    return userData(id);
+  },
+  userSubmissions(user, count) {
+    return new Pagination((offset, limit) => {
+      return storyData(user.submitted, offset, limit);
+    }, count)
   }
 };

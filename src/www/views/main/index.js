@@ -48,9 +48,13 @@
               stageContext.pushView("comments");
             },
             handleStoryAction(type, data) {
-              if(type === "user") stageContext.pushView("user", {
-                user: data
-              });
+              if(type === "user") {
+                busyIndicator.setBusy(true);
+                this.$store.dispatch("USER", data).then(() => {
+                  busyIndicator.setBusy(false);
+                  stageContext.pushView("user");
+                });
+              }
             }
           },
           computed: {

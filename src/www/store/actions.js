@@ -108,5 +108,18 @@ module.exports = {
 
   REPLIES(context, comment) {
     return fetchReplies(comment).then(replies => comment.replies = replies);
+  },
+
+  USER(context, id) {
+    const {commit} = context;
+    return HNFirebase.user(id).then(user => {
+      commit("SET_USER", user);
+    });
+  },
+  
+  USERSUBMISSIONS(context) {
+    const {state, commit} = context,
+        user = state.user;
+    return HNFirebase.userSubmissions(user, (user.submitted || [].length));
   }
 }

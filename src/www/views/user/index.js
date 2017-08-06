@@ -1,21 +1,29 @@
 (function() {
   const Stage = require("stage"),
-      Vue = require("vue");
+      Vue = require("vue"),
+      busyIndicator = require("app").BusyIndicator,
+      store = require("app").Store,
+      timeago = require("timeago.js")();
 
   Stage.defineView("user", function(stageContext, viewUi) {
-    let viewData, viewContent, actions;
+    let viewContent, actions;
 
     return {
       initialize(opts) {
-        viewData = {
-        };
-
         viewContent = new Vue({
-          data: viewData,
+          store: store,
           mounted: function() {
             console.log("Mounted user view");
           },
-          methods: {}
+          computed: {
+            user() {
+              return this.$store.state.user;
+            },
+            since() {
+              const time = this.$store.state.user.created;
+              return timeago.format(new Date(time * 1000));
+            }
+          }
         });
 
         actions = {
@@ -35,6 +43,9 @@
 
       getActionBar() {
         return actions;
+      },
+
+      activate() {
       }
     };
   });

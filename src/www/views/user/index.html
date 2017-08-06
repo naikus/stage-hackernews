@@ -15,6 +15,21 @@
     </div>
   </script>
   <div class="content">
+    <div class="user-card">
+      <div class="title" v-text="user.id">
+      </div>
+      <div class="detail">
+        <div class="created">
+          <span class="label">Since</span>
+          <span class="value" v-text="since"></span>
+        </div>
+        <div class="karma">
+          <span class="label">Karma</span>
+          <span class="value" v-text="user.karma"></span>
+        </div>
+      </div>
+      <div class="about" v-html="user.about"></div>
+    </div>
   </div>
   <script src="views/user/index.js"></script>
 </div>

@@ -1,10 +1,8 @@
 (function() {
   const Stage = require("stage"),
       Vue = require("vue"),
-      firebase = require("firebase-service"),
       busyIndicator = require("app").BusyIndicator,
       store = require("app").Store,
-      timeago = require("timeago.js")(),
       StoryComponent = require("components").Story,
       CommentComponent = require("components").Comment;
 
@@ -53,9 +51,13 @@
               if(type === "comment") fetchReplies(data);
             },
             handleStoryAction(type, data) {
-              if(type === "user") stageContext.pushView("user", {
-                user: data
-              });
+              if(type === "user") {
+                busyIndicator.setBusy(true);
+                this.$store.dispatch("USER", data).then(() => {
+                  busyIndicator.setBusy(false);
+                  stageContext.pushView("user");
+                });
+              }
             }
           },
           components: {
