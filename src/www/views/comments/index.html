@@ -11,7 +11,7 @@
   </script>
   <div class="content">
     <story-card v-bind:story="story" v-on:action="handleStoryAction"></story-card>
-    <div class="story-text" v-html="story.text"></div>
+    <div class="story-text" v-html="story.text" v-if="story.text"></div>
 
     <div class="comments">
       <hn-comment v-for="comment in comments" 

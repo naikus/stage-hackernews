@@ -7,7 +7,7 @@
       StoryComponent = require("components").Story;
 
   Stage.defineView("main", function(stageContext, viewUi) {
-    let content, viewData, viewContent, actions;
+    let content, viewData, viewContent, actions, storyContainer;
 
     return {
       initialize(opts) {
@@ -26,6 +26,8 @@
           store,
           mounted() {
             console.log("Mounted home view");
+            storyContainer = viewUi.querySelector(".content > .stories");
+            // console.log(storyContainer);
           },
           methods: {
             showStories(type) {
@@ -34,11 +36,17 @@
             },
             nextStories() {
               busyIndicator.setBusy(true);
-              this.$store.dispatch("NEXT_STORIES").then(() => busyIndicator.setBusy(false));
+              this.$store.dispatch("NEXT_STORIES").then(() => {
+                storyContainer.scrollTop = 0;
+                busyIndicator.setBusy(false);
+              });
             },
             previousStories() {
               busyIndicator.setBusy(true);
-              this.$store.dispatch("PREVIOUS_STORIES").then(() => busyIndicator.setBusy(false));
+              this.$store.dispatch("PREVIOUS_STORIES").then(() => {
+                storyContainer.scrollTop = 0;
+                busyIndicator.setBusy(false);
+              });
             },
             showComments(story, e) {
               if(e.target.nodeName === "A" && story.url || this.stories.type === "job") {

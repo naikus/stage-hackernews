@@ -97,7 +97,7 @@ function stories(type = "top", start = 0, count = 30) {
     });
   }else {
     const arrIds = cache[type].ids;
-    return storyData(arrids, start, count);
+    return storyData(arrIds, start, count);
   }
 }
 

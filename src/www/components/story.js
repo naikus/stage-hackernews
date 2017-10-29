@@ -7,7 +7,7 @@ module.exports = {
     template: `
     <div class="story">
       <span class="score">{{story.score}}</span>
-      <a class="title" target="_blank" :href="story.url">{{story.title}}</a>
+      <a class="title" target="_blank" :href="story.url" rel="noopener">{{story.title}}</a>
       <div class="detail">
         <a class="by" v-on:click.stop="handleUserClick">{{story.by}}</a> 
         <span>{{story.time | timeago}}</span>

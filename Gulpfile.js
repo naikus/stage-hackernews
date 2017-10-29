@@ -2,6 +2,7 @@ var gulp = require("gulp"),
     del = require("del"),
     jshint = require("gulp-jshint"),
     concat = require("gulp-concat"),
+    vbuffer = require("vinyl-buffer"),
     uglify = require("gulp-uglify"),
     less = require("gulp-less"),
     LessPluginAutoPrefix = require('less-plugin-autoprefix'),
@@ -14,7 +15,22 @@ var gulp = require("gulp"),
     fs = require("fs");
 
 
-var config = {
+
+const isProductionEnv = () => process.env.NODE_ENV === "production",
+    errorHandler = name => e => console.error(name + ": " + e.toString()),
+    uglifyIfProduction = stream => {
+      if(isProductionEnv()) {
+        stream = stream
+            .pipe(vbuffer())
+            .pipe(uglify())
+            .on("error", errorHandler("Uglify"));
+      }
+      return stream;
+    };
+
+
+
+const config = {
   src: {
     dir: "src/www/",
     assets: [
@@ -50,7 +66,20 @@ var config = {
   }
 };
 
-gulp.task("default", function() {
+
+
+gulp.task("default", ["env:production", "build"], () => {
+});
+
+
+
+gulp.task("env:production", () => {
+  process.env.NODE_ENV = "production";
+});
+
+
+
+gulp.task("help", function() {
   console.log("Available tasks:");
   console.log([
     "------------------------------------------------------------------------",
@@ -61,11 +90,13 @@ gulp.task("default", function() {
 });
 
 
+
 gulp.task("jshint", function() {
   return gulp.src(["src/js", "!src/js/lib"])
       .pipe(jshint())
       .pipe(jshint.reporter("default"));
 });
+
 
 
 gulp.task("lessc", function() {
@@ -89,7 +120,7 @@ gulp.task("clean", function(cb) {
 });
 
 
-/* Lib Bundle ---------------------------------------------------------------- */
+
 gulp.task("build-libs", function() {
   var b = browserify({
     debug: false
@@ -108,9 +139,14 @@ gulp.task("build-libs", function() {
     });
   });
 
-  b.transform("babelify", {presets: ["es2015"]})
-      .bundle().pipe(vsource("lib.js")).pipe(gulp.dest(config.dist.app_dir + "js/"));
+  let stream = b.transform("babelify", {presets: ["es2015"]})
+      .bundle().pipe(vsource("lib.js"));
+
+  return uglifyIfProduction(stream)
+      .pipe(gulp.dest(config.dist.app_dir + "js/"));
+      // .pipe(gulp.dest(config.dist.app_dir + "js/"));
 });
+
 
 
 gulp.task("copy-assets", function() {
@@ -126,6 +162,7 @@ gulp.task("copy-assets", function() {
 });
 
 
+
 gulp.task("build", ["build-libs", "copy-assets"], function() {
   gulp.start("jshint", "lessc");
 
@@ -134,9 +171,11 @@ gulp.task("build", ["build-libs", "copy-assets"], function() {
   var b = browserify();
   b.require("./src/www/app.js", {expose: "app"});
 
-  b.transform("babelify", {presets: ["es2015"]})
+  let stream = b.transform("babelify", {presets: ["es2015"]})
       .bundle()
-      .pipe(vsource("app.js"))
+      .pipe(vsource("app.js"));
+
+  uglifyIfProduction(stream)
       .pipe(gulp.dest(dist + "js/"));
 
   // babel transform view js files
@@ -160,9 +199,18 @@ gulp.task("build", ["build-libs", "copy-assets"], function() {
 });
 
 
+
 gulp.task("server", ["build"], function() {
   connect.server({
     root: "dist",
     post: 8080
+  });
+});
+
+
+gulp.task("prod:server", ["env:production", "build"], () => {
+  connect.server({
+    root: "dist",
+    port: 8080
   });
 });

@@ -38,6 +38,7 @@
     "stage": "git+https://github.com/naikus/stage.git",
     "store2": "^2.3.2",
     "timeago.js": "^3.0.2",
+    "vinyl-buffer": "^1.0.0",
     "whatwg-fetch": "^2.0.2"
   }
 }
