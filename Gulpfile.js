@@ -7,7 +7,6 @@ var gulp = require("gulp"),
     less = require("gulp-less"),
     LessPluginAutoPrefix = require('less-plugin-autoprefix'),
     vsource = require("vinyl-source-stream"),
-    eventStream = require("event-stream"),
     connect = require("gulp-connect"),
     browserify = require("browserify"),
     babel = require("gulp-babel"),
@@ -67,19 +66,13 @@ const config = {
 };
 
 
-
-gulp.task("default", ["env:production", "build"], () => {
-});
-
-
-
-gulp.task("env:production", () => {
+gulp.task("env:production", cb => {
   process.env.NODE_ENV = "production";
+  cb();
 });
 
 
-
-gulp.task("help", function() {
+gulp.task("help", () => {
   console.log("Available tasks:");
   console.log([
     "------------------------------------------------------------------------",
@@ -91,15 +84,15 @@ gulp.task("help", function() {
 
 
 
-gulp.task("jshint", function() {
-  return gulp.src(["src/js", "!src/js/lib"])
+gulp.task("jshint", () => {
+  return gulp.src(["src/www", "!src/www/lib"])
       .pipe(jshint())
       .pipe(jshint.reporter("default"));
 });
 
 
 
-gulp.task("lessc", function() {
+gulp.task("lessc", () => {
   // WARNING!! "add" option MUST be false. For stage.less
   // var prefixer = new LessPluginAutoPrefix({add: false, browsers: ["iOS >= 5"]});
   /*
@@ -107,13 +100,13 @@ gulp.task("lessc", function() {
         .pipe(less({plugins: [prefixer]}))
         .pipe(gulp.dest(config.dist.css_dir));
   */
-  gulp.src(config.src.dir + "app.less")
+  return gulp.src(config.src.dir + "app.less")
       .pipe(less(/*{plugins: [prefixer]}*/))
       .pipe(gulp.dest(config.dist.css_dir));
 });
 
 
-gulp.task("clean", function(cb) {
+gulp.task("clean", cb => {
   del([
     config.dist.app_dir
   ], cb);
@@ -121,7 +114,7 @@ gulp.task("clean", function(cb) {
 
 
 
-gulp.task("build-libs", function() {
+gulp.task("build-libs", () => {
   var b = browserify({
     debug: false
   });
@@ -139,7 +132,7 @@ gulp.task("build-libs", function() {
     });
   });
 
-  let stream = b.transform("babelify", {presets: ["es2015"]})
+  let stream = b.transform("babelify", {presets: ["env"]})
       .bundle().pipe(vsource("lib.js"));
 
   return uglifyIfProduction(stream)
@@ -149,7 +142,7 @@ gulp.task("build-libs", function() {
 
 
 
-gulp.task("copy-assets", function() {
+gulp.task("copy-assets", () => {
   var src = config.src.dir,
       dist = config.dist.app_dir,
       assets = config.src.assets.map(function(a) {
@@ -163,15 +156,16 @@ gulp.task("copy-assets", function() {
 
 
 
-gulp.task("build", ["build-libs", "copy-assets"], function() {
-  gulp.start("jshint", "lessc");
+gulp.task("build", gulp.series("build-libs", "copy-assets", () => {
+  gulp.task("jshint")();
+  gulp.task("lessc")();
 
   var src = config.src.dir, dist = config.dist.app_dir;
 
   var b = browserify();
   b.require("./src/www/app.js", {expose: "app"});
 
-  let stream = b.transform("babelify", {presets: ["es2015"]})
+  let stream = b.transform("babelify", {presets: ["env"]})
       .bundle()
       .pipe(vsource("app.js"));
 
@@ -180,7 +174,7 @@ gulp.task("build", ["build-libs", "copy-assets"], function() {
 
   // babel transform view js files
   gulp.src(src + "views/**/*.js")
-      .pipe(babel({presets: ["es2015"]}))
+      .pipe(babel({presets: ["env"]}))
       .pipe(gulp.dest(dist + "views"));
 
   // Exclude vendors since we've created a separate bundle for vendor libraries
@@ -196,21 +190,25 @@ gulp.task("build", ["build-libs", "copy-assets"], function() {
     src + "*.{html, css, png, jpg}"
   ]).pipe(gulp.dest(dist));
 
-});
+}));
 
 
 
-gulp.task("server", ["build"], function() {
+gulp.task("server", gulp.series("build", function() {
   connect.server({
     root: "dist",
     post: 8080
   });
-});
+}));
 
 
-gulp.task("prod:server", ["env:production", "build"], () => {
+gulp.task("prod:server", gulp.series("env:production", "build", () => {
   connect.server({
     root: "dist",
     port: 8080
   });
-});
+}));
+
+
+gulp.task("default", gulp.series("env:production", "build", () => {
+}));
