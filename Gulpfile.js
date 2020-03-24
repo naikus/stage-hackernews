@@ -132,7 +132,7 @@ gulp.task("build-libs", () => {
     });
   });
 
-  let stream = b.transform("babelify", {presets: ["env"]})
+  let stream = b.transform("babelify", { presets: ["@babel/preset-env"]})
       .bundle().pipe(vsource("lib.js"));
 
   return uglifyIfProduction(stream)
@@ -165,7 +165,7 @@ gulp.task("build", gulp.series("build-libs", "copy-assets", () => {
   var b = browserify();
   b.require("./src/www/app.js", {expose: "app"});
 
-  let stream = b.transform("babelify", {presets: ["env"]})
+  let stream = b.transform("babelify", { presets: ["@babel/preset-env"]})
       .bundle()
       .pipe(vsource("app.js"));
 
@@ -174,7 +174,7 @@ gulp.task("build", gulp.series("build-libs", "copy-assets", () => {
 
   // babel transform view js files
   gulp.src(src + "views/**/*.js")
-      .pipe(babel({presets: ["env"]}))
+    .pipe(babel({ presets: ["@babel/preset-env"]}))
       .pipe(gulp.dest(dist + "views"));
 
   // Exclude vendors since we've created a separate bundle for vendor libraries
@@ -197,7 +197,8 @@ gulp.task("build", gulp.series("build-libs", "copy-assets", () => {
 gulp.task("server", gulp.series("build", function() {
   connect.server({
     root: "dist",
-    post: 8080
+    post: 8080,
+    host: "0.0.0.0"
   });
 }));
 
@@ -205,7 +206,8 @@ gulp.task("server", gulp.series("build", function() {
 gulp.task("prod:server", gulp.series("env:production", "build", () => {
   connect.server({
     root: "dist",
-    port: 8080
+    port: 8080,
+    host: "0.0.0.0"
   });
 }));
 
